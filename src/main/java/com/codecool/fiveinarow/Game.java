@@ -1,4 +1,5 @@
 package com.codecool.fiveinarow;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game implements GameInterface {
@@ -80,10 +81,43 @@ public class Game implements GameInterface {
     }
 
     public boolean hasWon(int player, int howMany) {
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == player) {
+                    if (j + howMany <= board[i].length) {
+                        if (checkHorizontalAndVertical(player, howMany, i, j, true)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length) {
+                        if (checkHorizontalAndVertical(player, howMany, i, j, false)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length && j + howMany <= board[i].length){
+                        if (checkDiagonal(player, howMany, i, j, true)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length && j - howMany >= -1){
+                        if (checkDiagonal(player, howMany, i, j, false)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public boolean isFull() {
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j++){
+                if (board[i][j] == 0){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -124,5 +158,37 @@ public class Game implements GameInterface {
     }
 
     public void play(int howMany) {
+    }
+
+    private boolean checkHorizontalAndVertical(int player, int howMany, int i, int j, boolean horizontal) {
+        if (horizontal) {
+            for (int x = j; x < j + howMany; x++) {
+                if (board[i][x] != player) {
+                    return false;
+                }
+            }
+        } else {
+            for (int x = i; x < i + howMany; x++) {
+                if (board[x][j] != player) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkDiagonal(int player, int howMany, int i, int j, boolean plus) {
+        for (int x = 1; x < howMany; x++){
+            if (plus) {
+                if (board[i + x][j + x] != player) {
+                    return false;
+                }
+            } else {
+                if (board[i + x][j - x] != player) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
