@@ -1,6 +1,6 @@
 package com.codecool.fiveinarow;
-import java.util.Arrays;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Game implements GameInterface {
 
@@ -34,7 +34,9 @@ public class Game implements GameInterface {
 //          saving user input as a String
             String userInput = scanner.nextLine();
 
-            if (userInput.length() != 2) {
+            if (userInput.equals("quit")){
+                quitGame();
+            } else if (userInput.length() != 2) {
                 System.out.println("Invalid number of characters, try again.");
                 continue;
             } else if (!Character.isLetter(userInput.charAt(0))){
@@ -152,12 +154,59 @@ public class Game implements GameInterface {
     }
 
     public void printResult(int player) {
+        if(player == 1){
+            System.out.println("X won!");
+        }else if(player == 2){
+            System.out.println("O won!");
+        }else{
+            System.out.println("It's a tie!");
+        }
     }
 
     public void enableAi(int player) {
     }
 
+    public void quitGame(){
+        System.out.println("Thank you for playing! Bye.");
+        System.exit(0);
+    }
+
     public void play(int howMany) {
+        int player1 = 1;
+        int player2 = 2;
+        int player = player1;
+        boolean gameIsGoing = true;
+        printBoard();
+
+        while (gameIsGoing){
+            int [] playerMove = getMove(player);
+            mark(player, playerMove[0], playerMove[1]);
+            printBoard();
+            System.out.println(player);
+            //            check if someone won
+            if (hasWon(player, howMany)){
+                //                if yes
+                printResult(player);
+                printBoard();
+                gameIsGoing = false;
+            }
+            //            if not check if board is full
+            else{
+                if (isFull() == false){
+                    //                    if yes
+                    player = 0;
+                    printResult(player);
+                    printBoard();
+                    gameIsGoing = false;
+                }else{
+                    if(player == player1){
+                        player = player2;
+                    }else{
+                        player = player1;
+                    }
+                }
+            }
+        }
     }
 
     private boolean checkHorizontalAndVertical(int player, int howMany, int i, int j, boolean horizontal) {
@@ -192,3 +241,4 @@ public class Game implements GameInterface {
         return true;
     }
 }
+
