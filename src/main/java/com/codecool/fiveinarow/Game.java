@@ -1,6 +1,6 @@
 package com.codecool.fiveinarow;
-import javax.sound.midi.SysexMessage;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class Game implements GameInterface {
 
@@ -29,7 +29,7 @@ public class Game implements GameInterface {
 
         boolean isInputValid = false;
 
-        while (isInputValid == false){
+        while (!isInputValid){
             System.out.print("Player" + player + " turn: ");
 
 //          saving user input as a String
@@ -69,21 +69,16 @@ public class Game implements GameInterface {
 
             if (row > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
-                continue;
             } else if (col > board[0].length - 1) {
                 System.out.println("Invalid column index, try again.");
-                continue;
             } else if (board[row][col] != 0){
                 System.out.println("Already taken, try again.");
-                continue;
             } else {
                 isInputValid = true;
             }
         }
 
-        int[] result = new int[] {row, col};
-
-        return result;
+        return new int[] {row, col};
     }
 
     public int[] getAiMove(int player) {
@@ -95,10 +90,43 @@ public class Game implements GameInterface {
     }
 
     public boolean hasWon(int player, int howMany) {
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == player) {
+                    if (j + howMany <= board[i].length) {
+                        if (checkHorizontalAndVertical(player, howMany, i, j, true)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length) {
+                        if (checkHorizontalAndVertical(player, howMany, i, j, false)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length && j + howMany <= board[i].length){
+                        if (checkDiagonal(player, howMany, i, j, true)){
+                            return true;
+                        }
+                    }
+                    if (i + howMany <= board.length && j - howMany >= -1){
+                        if (checkDiagonal(player, howMany, i, j, false)){
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
         return false;
     }
 
     public boolean isFull() {
+        for (int i = 0; i < board.length; i++){
+            for (int j = 0; j < board[i].length; j++){
+                if (board[i][j] == 0){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
@@ -138,13 +166,85 @@ public class Game implements GameInterface {
     }
 
     public void printResult(int player) {
+        if(player == 1){
+            System.out.println("X won!");
+        }else if(player == 2){
+            System.out.println("O won!");
+        }else{
+            System.out.println("It's a tie!");
+        }
     }
 
     public void enableAi(int player) {
     }
 
     public void play(int howMany) {
+        int player1 = 1;
+        int player2 = 2;
+        int player = player1;
+        boolean gameIsGoing = true;
+        printBoard();
+
+        while (gameIsGoing){
+            int [] playerMove = getMove(player);
+            mark(player, playerMove[0], playerMove[1]);
+            printBoard();
+            System.out.println(player);
+            //            check if someone won
+            if (hasWon(player, howMany)){
+                //                if yes
+                printResult(player);
+                printBoard();
+                gameIsGoing = false;
+            }
+            //            if not check if board is full
+            else{
+                if (isFull() == false){
+                    //                    if yes
+                    player = 0;
+                    printResult(player);
+                    printBoard();
+                    gameIsGoing = false;
+                }else{
+                    if(player == player1){
+                        player = player2;
+                    }else{
+                        player = player1;
+                    }
+                }
+            }
+        }
     }
 
+    private boolean checkHorizontalAndVertical(int player, int howMany, int i, int j, boolean horizontal) {
+        if (horizontal) {
+            for (int x = j; x < j + howMany; x++) {
+                if (board[i][x] != player) {
+                    return false;
+                }
+            }
+        } else {
+            for (int x = i; x < i + howMany; x++) {
+                if (board[x][j] != player) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
+    private boolean checkDiagonal(int player, int howMany, int i, int j, boolean plus) {
+        for (int x = 1; x < howMany; x++){
+            if (plus) {
+                if (board[i + x][j + x] != player) {
+                    return false;
+                }
+            } else {
+                if (board[i + x][j - x] != player) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
