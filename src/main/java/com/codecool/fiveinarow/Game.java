@@ -35,7 +35,11 @@ public class Game implements GameInterface {
 //          saving user input as a String
             userInput = scanner.nextLine();
 
-            if (userInput.length() != 2 && userInput.length() != 3) {
+
+            if (userInput.equals("quit")){
+                quitGame();
+            } else if (userInput.length() != 2 && userInput.length() != 3) { {
+
                 System.out.println("Invalid number of characters, try again.");
                 continue;
             } else {
@@ -178,6 +182,11 @@ public class Game implements GameInterface {
     public void enableAi(int player) {
     }
 
+    public void quitGame(){
+        System.out.println("Thank you for playing! Bye.");
+        System.exit(0);
+    }
+
     public void play(int howMany) {
         int player1 = 1;
         int player2 = 2;
@@ -248,3 +257,4 @@ public class Game implements GameInterface {
         return true;
     }
 }
+
