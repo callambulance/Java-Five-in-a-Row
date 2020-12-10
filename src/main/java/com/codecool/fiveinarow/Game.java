@@ -38,7 +38,7 @@ public class Game implements GameInterface {
 
             if (userInput.equals("quit")){
                 quitGame();
-            } else if (userInput.length() != 2 && userInput.length() != 3) { {
+            } else if (userInput.length() != 2 && userInput.length() != 3) {
 
                 System.out.println("Invalid number of characters, try again.");
                 continue;
@@ -208,7 +208,7 @@ public class Game implements GameInterface {
             }
             //            if not check if board is full
             else{
-                if (isFull() == false){
+                if (!isFull()){
                     //                    if yes
                     player = 0;
                     printResult(player);
@@ -257,4 +257,3 @@ public class Game implements GameInterface {
         return true;
     }
 }
-
