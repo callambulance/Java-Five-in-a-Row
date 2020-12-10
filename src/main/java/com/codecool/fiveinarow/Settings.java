@@ -6,11 +6,13 @@ public class Settings {
     private int howMany;
     private String gameMode;
 
-    public Settings(int rows, int columns, int howMany, String gameMode) {
+
+    public Settings(int rows, int columns, int howMany, String gameMode, String player1, String player2) {
         this.rows = rows;
         this.columns = columns;
         this.howMany = howMany;
         this.gameMode = gameMode;
+
     }
 
     public int getRows() {
@@ -44,4 +46,8 @@ public class Settings {
     public void setGameMode(String gameMode) {
         this.gameMode = gameMode;
     }
+
+
+
+
 }

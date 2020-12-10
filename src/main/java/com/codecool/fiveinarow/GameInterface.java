@@ -7,13 +7,13 @@ public interface GameInterface {
     void setBoard(int[][] board);
     int[][] getBoard();
 
-    int[] getMove(int player);
+    int[] getMove(int player, String playerName);
     int[] getAiMove(int player);
     void mark(int player, int row, int col);
     boolean hasWon(int player, int howMany);
     boolean isFull();
     void printBoard();
-    void printResult(int player);
+    void printResult(int player, String playerName);
     void enableAi(int player);
-    void play(int howMany);
+    void play(int howMany, String player1, String player2, int number1, int number2);
 }

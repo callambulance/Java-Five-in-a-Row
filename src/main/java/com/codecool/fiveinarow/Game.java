@@ -21,68 +21,23 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public int[] getMove(int player) {
+    public int[] getMove(int player, String playerName) {
 
-        int row = 0;
-        int col = 0;
-        String userInput = "";
+        while (true) {
+            Move move = UserInteraction.getUserMove(player, playerName);
 
-        boolean isInputValid = false;
-
-        while (!isInputValid){
-            System.out.print("Player" + player + " turn: ");
-
-//          saving user input as a String
-            userInput = scanner.nextLine();
-
-
-            if (userInput.equals("quit")){
-                quitGame();
-            } else if (userInput.length() != 2 && userInput.length() != 3) {
-
-                System.out.println("Invalid number of characters, try again.");
-                continue;
-            } else {
-                if (!Character.isLetter(userInput.charAt(0))){
-                    System.out.println("Invalid row character, try again.");
-                    continue;
-                } else if (!Character.isDigit(userInput.charAt(1)) || userInput.charAt(1) == '0'){
-                    System.out.println("Invalid column character, try again.");
-                    continue;
-                } else if (userInput.length() == 3){
-                    if (!Character.isDigit(userInput.charAt(2))){
-                        System.out.println("Invalid column character, try again.");
-                        continue;
-                    }
-                }
-            }
-
-//          converting userInput[0] to numeric value
-            char upperLetter = Character.toUpperCase(userInput.charAt(0));
-            row = ((int)upperLetter - (int)'A');
-
-//          converting userInput[1] to int and substracting 1
-//          in order to get correct col index
-            if (userInput.length() == 2){
-                col = Character.getNumericValue(userInput.charAt(1)) - 1;
-            } else {
-                String temp = "" + userInput.charAt(1) + userInput.charAt(2);
-                col = Integer.parseInt(temp) - 1;
-            }
-
-
-            if (row > board.length - 1) {
+            if (move.getRow() > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
-            } else if (col > board[0].length - 1) {
+            } else if (move.getColumn() > board[0].length - 1) {
                 System.out.println("Invalid column index, try again.");
-            } else if (board[row][col] != 0){
+            } else if (board[move.getRow()][move.getColumn()] != 0){
                 System.out.println("Already taken, try again.");
             } else {
-                isInputValid = true;
+                return move.toArray();
             }
         }
 
-        return new int[] {row, col};
+
     }
 
     public int[] getAiMove(int player) {
@@ -169,11 +124,11 @@ public class Game implements GameInterface {
         System.out.println();
     }
 
-    public void printResult(int player) {
+    public void printResult(int player, String playerName) {
         if(player == 1){
-            System.out.println("X won!");
+            System.out.println(playerName + " won!");
         }else if(player == 2){
-            System.out.println("O won!");
+            System.out.println(playerName + " won!");
         }else{
             System.out.println("It's a tie!");
         }
@@ -182,27 +137,28 @@ public class Game implements GameInterface {
     public void enableAi(int player) {
     }
 
-    public void quitGame(){
+    public static void quitGame(){
         System.out.println("Thank you for playing! Bye.");
         System.exit(0);
     }
 
-    public void play(int howMany) {
-        int player1 = 1;
-        int player2 = 2;
-        int player = player1;
+    public void play(int howMany, String player1, String player2, int playerNumber1, int playerNumber2) {
+//        int player1 = 1;
+//        int player2 = 2;
+
+        int player = playerNumber1;
+        String playerName = player1;
         boolean gameIsGoing = true;
         printBoard();
 
         while (gameIsGoing){
-            int [] playerMove = getMove(player);
+            int [] playerMove = getMove(player, playerName);
             mark(player, playerMove[0], playerMove[1]);
             printBoard();
-            System.out.println(player);
             //            check if someone won
             if (hasWon(player, howMany)){
                 //                if yes
-                printResult(player);
+                printResult(player, playerName);
                 printBoard();
                 gameIsGoing = false;
             }
@@ -211,14 +167,16 @@ public class Game implements GameInterface {
                 if (!isFull()){
                     //                    if yes
                     player = 0;
-                    printResult(player);
+                    printResult(player, playerName);
                     printBoard();
                     gameIsGoing = false;
                 }else{
-                    if(player == player1){
-                        player = player2;
+                    if(player == playerNumber1){
+                        player = playerNumber2;
+                        playerName = player2;
                     }else{
-                        player = player1;
+                        player = playerNumber1;
+                        playerName = player1;
                     }
                 }
             }
