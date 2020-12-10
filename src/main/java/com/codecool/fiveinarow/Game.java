@@ -23,62 +23,21 @@ public class Game implements GameInterface {
 
     public int[] getMove(int player) {
 
-        int row = 0;
-        int col = 0;
-        String userInput = "";
 
-        boolean isInputValid = false;
-
-        while (!isInputValid){
-            System.out.print("Player" + player + " turn: ");
-
-//          saving user input as a String
-            userInput = scanner.nextLine();
-
-            if (userInput.length() != 2 && userInput.length() != 3) {
-                System.out.println("Invalid number of characters, try again.");
-                continue;
-            } else {
-                if (!Character.isLetter(userInput.charAt(0))){
-                    System.out.println("Invalid row character, try again.");
-                    continue;
-                } else if (!Character.isDigit(userInput.charAt(1)) || userInput.charAt(1) == '0'){
-                    System.out.println("Invalid column character, try again.");
-                    continue;
-                } else if (userInput.length() == 3){
-                    if (!Character.isDigit(userInput.charAt(2))){
-                        System.out.println("Invalid column character, try again.");
-                        continue;
-                    }
-                }
-            }
-
-//          converting userInput[0] to numeric value
-            char upperLetter = Character.toUpperCase(userInput.charAt(0));
-            row = ((int)upperLetter - (int)'A');
-
-//          converting userInput[1] to int and substracting 1
-//          in order to get correct col index
-            if (userInput.length() == 2){
-                col = Character.getNumericValue(userInput.charAt(1)) - 1;
-            } else {
-                String temp = "" + userInput.charAt(1) + userInput.charAt(2);
-                col = Integer.parseInt(temp) - 1;
-            }
-
-
-            if (row > board.length - 1) {
+        while (true) {
+            Move move = UserInteraction.getUserMove(player);
+            if (move.getRow() > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
-            } else if (col > board[0].length - 1) {
+            } else if (move.getColumn() > board[0].length - 1) {
                 System.out.println("Invalid column index, try again.");
-            } else if (board[row][col] != 0){
+            } else if (board[move.getRow()][move.getColumn()] != 0){
                 System.out.println("Already taken, try again.");
             } else {
-                isInputValid = true;
+                return move.toArray();
             }
         }
 
-        return new int[] {row, col};
+
     }
 
     public int[] getAiMove(int player) {
