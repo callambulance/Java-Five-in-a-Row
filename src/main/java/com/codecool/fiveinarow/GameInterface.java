@@ -15,5 +15,5 @@ public interface GameInterface {
     void printBoard();
     void printResult(int player, String playerName);
     void enableAi(int player);
-    void play(int howMany, String player1, String player2, int number1, int number2);
+    void play(int howMany);
 }

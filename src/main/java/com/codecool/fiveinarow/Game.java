@@ -8,9 +8,13 @@ public class Game implements GameInterface {
     private Scanner scanner = new Scanner(System.in);
 
     private int[][] board;
+    private String player1Name;
+    private String player2Name;
 
-    public Game(int nRows, int nCols) {
+    public Game(int nRows, int nCols, String player1Name,  String player2Name) {
         this.board = new int[nRows][nCols];
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
     }
 
     public int[][] getBoard() {
@@ -142,12 +146,11 @@ public class Game implements GameInterface {
         System.exit(0);
     }
 
-    public void play(int howMany, String player1, String player2, int playerNumber1, int playerNumber2) {
-//        int player1 = 1;
-//        int player2 = 2;
-
-        int player = playerNumber1;
-        String playerName = player1;
+    public void play(int howMany) {
+        int player1 = 1;
+        int player2 = 2;
+        int player = player1;
+        String playerName = player1Name;
         boolean gameIsGoing = true;
         printBoard();
 
@@ -171,12 +174,12 @@ public class Game implements GameInterface {
                     printBoard();
                     gameIsGoing = false;
                 }else{
-                    if(player == playerNumber1){
-                        player = playerNumber2;
-                        playerName = player2;
+                    if(player == player1){
+                        player = player2;
+                        playerName = player2Name;
                     }else{
-                        player = playerNumber1;
-                        playerName = player1;
+                        player = player1;
+                        playerName = player1Name;
                     }
                 }
             }

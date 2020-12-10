@@ -9,12 +9,9 @@ public class FiveInARow {
         Player player1 = menu.player1;
         Player player2 = menu.player2;
 
+        Game game = new Game(settings.getRows(), settings.getColumns(), player1.getName(), player2.getName());
 
-        Game game = new Game(settings.getRows(), settings.getColumns());
-
-        game.enableAi(player2.getNumber());
-
-        game.play(settings.getHowMany(), player1.getName(), player2.getName(), player1.getNumber(), player2.getNumber());
+        game.play(settings.getHowMany());
 
     }
 }
