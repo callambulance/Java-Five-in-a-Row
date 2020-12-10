@@ -38,7 +38,7 @@ public class Game implements GameInterface {
 
             if (userInput.equals("quit")){
                 quitGame();
-            } else if (userInput.length() != 2 && userInput.length() != 3) { {
+            } else if (userInput.length() != 2 && userInput.length() != 3) {
 
                 System.out.println("Invalid number of characters, try again.");
                 continue;
