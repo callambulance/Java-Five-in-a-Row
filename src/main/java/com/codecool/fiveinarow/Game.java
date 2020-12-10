@@ -25,26 +25,36 @@ public class Game implements GameInterface {
 
         int row = 0;
         int col = 0;
+        String userInput = "";
 
         boolean isInputValid = false;
 
-        while (isInputValid == false){
+        while (!isInputValid){
             System.out.print("Player" + player + " turn: ");
 
 //          saving user input as a String
-            String userInput = scanner.nextLine();
+            userInput = scanner.nextLine();
+
 
             if (userInput.equals("quit")){
                 quitGame();
-            } else if (userInput.length() != 2) {
+            } else if (userInput.length() != 2 && userInput.length() != 3) { {
+
                 System.out.println("Invalid number of characters, try again.");
                 continue;
-            } else if (!Character.isLetter(userInput.charAt(0))){
-                System.out.println("Invalid row character, try again.");
-                continue;
-            } else if (!Character.isDigit(userInput.charAt(1))){
-                System.out.println("Invalid column character, try again.");
-                continue;
+            } else {
+                if (!Character.isLetter(userInput.charAt(0))){
+                    System.out.println("Invalid row character, try again.");
+                    continue;
+                } else if (!Character.isDigit(userInput.charAt(1)) || userInput.charAt(1) == '0'){
+                    System.out.println("Invalid column character, try again.");
+                    continue;
+                } else if (userInput.length() == 3){
+                    if (!Character.isDigit(userInput.charAt(2))){
+                        System.out.println("Invalid column character, try again.");
+                        continue;
+                    }
+                }
             }
 
 //          converting userInput[0] to numeric value
@@ -53,25 +63,26 @@ public class Game implements GameInterface {
 
 //          converting userInput[1] to int and substracting 1
 //          in order to get correct col index
-            col = Character.getNumericValue(userInput.charAt(1)) - 1;
+            if (userInput.length() == 2){
+                col = Character.getNumericValue(userInput.charAt(1)) - 1;
+            } else {
+                String temp = "" + userInput.charAt(1) + userInput.charAt(2);
+                col = Integer.parseInt(temp) - 1;
+            }
+
 
             if (row > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
-                continue;
             } else if (col > board[0].length - 1) {
                 System.out.println("Invalid column index, try again.");
-                continue;
             } else if (board[row][col] != 0){
                 System.out.println("Already taken, try again.");
-                continue;
             } else {
                 isInputValid = true;
             }
         }
 
-        int[] result = new int[] {row, col};
-
-        return result;
+        return new int[] {row, col};
     }
 
     public int[] getAiMove(int player) {
@@ -131,7 +142,12 @@ public class Game implements GameInterface {
         System.out.println();
         System.out.print(" ");
         for (int colCounter = 1; colCounter <= board[0].length; colCounter++){
-            System.out.print("  " + colCounter);
+            if (colCounter >= 10){
+                System.out.print(" " + colCounter);
+            } else {
+                System.out.print("  " + colCounter);
+            }
+
         }
         System.out.println();
 
