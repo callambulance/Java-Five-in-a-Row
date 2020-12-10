@@ -24,8 +24,10 @@ public class Game implements GameInterface {
     public int[] getMove(int player) {
 
 
+
         while (true) {
             Move move = UserInteraction.getUserMove(player);
+
             if (move.getRow() > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
             } else if (move.getColumn() > board[0].length - 1) {
@@ -135,6 +137,11 @@ public class Game implements GameInterface {
     }
 
     public void enableAi(int player) {
+    }
+
+    public static void quitGame(){
+        System.out.println("Thank you for playing! Bye.");
+        System.exit(0);
     }
 
     public void play(int howMany) {

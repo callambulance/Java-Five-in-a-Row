@@ -16,7 +16,9 @@ public class UserInteraction {
 //          saving user input as a String
             String userInput = scanner.nextLine();
 
-            if (userInput.length() != 2 && userInput.length() != 3) {
+            if (userInput.equals("quit")) {
+                Game.quitGame();
+            } else if (userInput.length() != 2 && userInput.length() != 3) {
                 System.out.println("Invalid number of characters, try again.");
                 continue;
             } else {

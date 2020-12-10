@@ -26,7 +26,8 @@ public class Menu {
         System.out.println("2.CHARACTERS TO WIN: " + settings.getHowMany());
         System.out.println("3.GAME MODE: " + settings.getGameMode());
         System.out.println("4. START GAME");
-        System.out.print("You can change game settings by pressing corresponding key (1-4): ");
+        System.out.println("0. QUIT GAME");
+        System.out.print("You can change game settings by pressing corresponding key (0-4): ");
 
     }
 
@@ -42,7 +43,9 @@ public class Menu {
                 System.out.println("Invalid number of characters, try again.");
             } else if (!Character.isDigit(userInput.charAt(0))) {
                 System.out.println("Invalid character, try again.");
-            } else if (Integer.parseInt(userInput) == 0 || Integer.parseInt(userInput) > 4) {
+            } else if (Integer.parseInt(userInput) == 0) {
+                Game.quitGame();
+            } else if (Integer.parseInt(userInput) > 4) {
                 System.out.println("Invalid digit, try again.");
             } else {
 

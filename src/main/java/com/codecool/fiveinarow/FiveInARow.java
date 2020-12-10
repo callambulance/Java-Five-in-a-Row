@@ -9,5 +9,8 @@ public class FiveInARow {
 
         Game game = new Game(settings.getRows(), settings.getColumns());
         game.play(settings.getHowMany());
+
     }
 }
+
+
