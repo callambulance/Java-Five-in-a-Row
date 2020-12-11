@@ -8,9 +8,13 @@ public class Game implements GameInterface {
     private Scanner scanner = new Scanner(System.in);
 
     private int[][] board;
+    private String player1Name;
+    private String player2Name;
 
-    public Game(int nRows, int nCols) {
+    public Game(int nRows, int nCols, String player1Name,  String player2Name) {
         this.board = new int[nRows][nCols];
+        this.player1Name = player1Name;
+        this.player2Name = player2Name;
     }
 
     public int[][] getBoard() {
@@ -21,12 +25,10 @@ public class Game implements GameInterface {
         this.board = board;
     }
 
-    public int[] getMove(int player) {
-
-
+    public int[] getMove(int player, String playerName) {
 
         while (true) {
-            Move move = UserInteraction.getUserMove(player);
+            Move move = UserInteraction.getUserMove(player, playerName);
 
             if (move.getRow() > board.length - 1) {
                 System.out.println("Invalid row index, try again.");
@@ -126,11 +128,11 @@ public class Game implements GameInterface {
         System.out.println();
     }
 
-    public void printResult(int player) {
+    public void printResult(int player, String playerName) {
         if(player == 1){
-            System.out.println("X won!");
+            System.out.println(playerName + " won!");
         }else if(player == 2){
-            System.out.println("O won!");
+            System.out.println(playerName + " won!");
         }else{
             System.out.println("It's a tie!");
         }
@@ -148,34 +150,36 @@ public class Game implements GameInterface {
         int player1 = 1;
         int player2 = 2;
         int player = player1;
+        String playerName = player1Name;
         boolean gameIsGoing = true;
         printBoard();
 
         while (gameIsGoing){
-            int [] playerMove = getMove(player);
+            int [] playerMove = getMove(player, playerName);
             mark(player, playerMove[0], playerMove[1]);
             printBoard();
-            System.out.println(player);
             //            check if someone won
             if (hasWon(player, howMany)){
                 //                if yes
-                printResult(player);
+                printResult(player, playerName);
                 printBoard();
                 gameIsGoing = false;
             }
             //            if not check if board is full
             else{
-                if (isFull() == false){
+                if (!isFull()){
                     //                    if yes
                     player = 0;
-                    printResult(player);
+                    printResult(player, playerName);
                     printBoard();
                     gameIsGoing = false;
                 }else{
                     if(player == player1){
                         player = player2;
+                        playerName = player2Name;
                     }else{
                         player = player1;
+                        playerName = player1Name;
                     }
                 }
             }

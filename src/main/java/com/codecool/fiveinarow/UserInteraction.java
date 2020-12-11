@@ -7,11 +7,11 @@ public class UserInteraction {
 
     private static final Scanner scanner = new Scanner(System.in);
 
-    public static Move getUserMove(int player){
+    public static Move getUserMove(int player, String playerName){
 
 
         while (true){
-            System.out.print("Player" + player + " turn: ");
+            System.out.print(playerName + " turn: ");
 
 //          saving user input as a String
             String userInput = scanner.nextLine();
