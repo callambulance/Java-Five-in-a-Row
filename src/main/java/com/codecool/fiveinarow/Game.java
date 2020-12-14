@@ -48,6 +48,7 @@ public class Game implements GameInterface {
 
     public void mark(int player, int row, int col) {
         board[row][col] = player;
+        Sound.playMusic("markBoard.wav");
     }
 
     public boolean hasWon(int player, int howMany) {
