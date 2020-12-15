@@ -13,8 +13,8 @@ public class Menu {
             "╚═╝     ╚═╝  ╚═══╝  ╚══════╝    ╚═╝╚═╝  ╚═══╝    ╚═╝  ╚═╝    ╚═╝  ╚═╝ ╚═════╝  ╚══╝╚══╝ \n" +
             "                                                                                        ";
 
-    Player player1 = new Player("player1", 1);
-    Player player2 = new Player("player2", 2);
+    Player player1 = new Player("player1", 1, 'H');
+    Player player2 = new Player("player2", 2, 'H');
 
     private Settings settings = new Settings(3, 3, 3, "PLAYER VS. PLAYER", player1.getName(), player2.getName());
 

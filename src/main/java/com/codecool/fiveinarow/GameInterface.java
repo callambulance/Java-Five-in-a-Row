@@ -13,7 +13,7 @@ public interface GameInterface {
     boolean hasWon(int player, int howMany);
     boolean isFull();
     void printBoard();
-    void printResult(int player, String playerName);
+    void printResult(int player);
     void enableAi(int player);
     void play(int howMany);
 }
