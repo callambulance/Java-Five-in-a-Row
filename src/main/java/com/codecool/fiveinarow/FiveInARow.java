@@ -9,7 +9,11 @@ public class FiveInARow {
         Player player1 = menu.player1;
         Player player2 = menu.player2;
 
-        Game game = new Game(settings.getRows(), settings.getColumns(), player1.getName(), player2.getName());
+        Game game = new Game(settings.getRows(), settings.getColumns(), player1, player2);
+
+        if(settings.getGameMode() == "PLAYER VS. AI"){
+            game.enableAi(player2.getNumber());
+        }
 
         game.play(settings.getHowMany());
 

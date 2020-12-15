@@ -8,13 +8,17 @@ public class Game implements GameInterface {
     private Scanner scanner = new Scanner(System.in);
 
     private int[][] board;
-    private String player1Name;
-    private String player2Name;
 
-    public Game(int nRows, int nCols, String player1Name,  String player2Name) {
+    Player player1;
+    Player player2;
+
+//    static final PLAYER1NUMBER = 1;
+//    static final PLAYER1NUMBER = 2;
+
+    public Game(int nRows, int nCols, Player player1,  Player player2) {
         this.board = new int[nRows][nCols];
-        this.player1Name = player1Name;
-        this.player2Name = player2Name;
+        this.player1 = player1;
+        this.player2 = player2;
     }
 
     public int[][] getBoard() {
@@ -45,7 +49,9 @@ public class Game implements GameInterface {
     }
 
     public int[] getAiMove(int player) {
-        return null;
+//        example just for checking if it works
+        int [] move = {0, 0};
+        return move;
     }
 
     public void mark(int player, int row, int col) {
@@ -128,17 +134,20 @@ public class Game implements GameInterface {
         System.out.println();
     }
 
-    public void printResult(int player, String playerName) {
-        if(player == 1){
-            System.out.println(playerName + " won!");
-        }else if(player == 2){
-            System.out.println(playerName + " won!");
-        }else{
+    public void printResult(int player) {
+        if(player == 1) {
+            System.out.println(player1.getName() + " won!");
+        } else if(player == 2){
+            System.out.println(player2.getName() + " won!");
+        }
+        else if (player == 0) {
             System.out.println("It's a tie!");
         }
     }
 
     public void enableAi(int player) {
+//        making second player an AI
+        player2.setPlayerType('A');
     }
 
     public static void quitGame(){
@@ -147,21 +156,27 @@ public class Game implements GameInterface {
     }
 
     public void play(int howMany) {
-        int player1 = 1;
-        int player2 = 2;
-        int player = player1;
-        String playerName = player1Name;
+        Player player = player1;
+        int [] playerMove;
         boolean gameIsGoing = true;
         printBoard();
 
         while (gameIsGoing){
-            int [] playerMove = getMove(player, playerName);
-            mark(player, playerMove[0], playerMove[1]);
+//            checking if player is Human or not
+            if (player.getPlayerType() == 'H') {
+                playerMove = getMove(player.getNumber(), player.getName());
+            }
+            else{
+//                if player is AI
+                playerMove = getAiMove(player.getNumber());
+            }
+            mark(player.getNumber(), playerMove[0], playerMove[1]);
             printBoard();
+
             //            check if someone won
-            if (hasWon(player, howMany)){
+            if (hasWon(player.getNumber(), howMany)){
                 //                if yes
-                printResult(player, playerName);
+                printResult(player.getNumber());
                 printBoard();
                 gameIsGoing = false;
             }
@@ -169,17 +184,15 @@ public class Game implements GameInterface {
             else{
                 if (!isFull()){
                     //                    if yes
-                    player = 0;
-                    printResult(player, playerName);
+                    int playerNumber = 0;
+                    printResult(playerNumber);
                     printBoard();
                     gameIsGoing = false;
                 }else{
-                    if(player == player1){
+                    if(player.getNumber() == player1.getNumber()){
                         player = player2;
-                        playerName = player2Name;
                     }else{
                         player = player1;
-                        playerName = player1Name;
                     }
                 }
             }
