@@ -50,8 +50,27 @@ public class Game implements GameInterface {
 
     public int[] getAiMove(int player) {
 //        example just for checking if it works
-        int [] move = {0, 0};
+        int x = 0; // x - row
+        int y = 0;  // y - column
+
+        while (board[x][y] != 0){
+            x = (int) (Math.random() * board.length);
+            y = (int) (Math.random() * board[0].length);
+        }
+        int [] move = {x, y};
+
         return move;
+    }
+
+
+    public int[] AIwon (int howMany, int player) {
+
+        return null;
+    }
+
+    public int[] AIdontLose (int howMany, int player) {
+
+        return null;
     }
 
     public void mark(int player, int row, int col) {
@@ -168,7 +187,13 @@ public class Game implements GameInterface {
             }
             else{
 //                if player is AI
-                playerMove = getAiMove(player.getNumber());
+                playerMove = AIwon(howMany, player.getNumber());
+                if (playerMove == null){
+                    playerMove = AIdontLose(howMany, player.getNumber());
+                    if(playerMove == null){
+                        playerMove = getAiMove(player.getNumber());
+                    }
+                }
             }
             mark(player.getNumber(), playerMove[0], playerMove[1]);
             printBoard();
