@@ -8,7 +8,7 @@ public interface GameInterface {
     int[][] getBoard();
 
     int[] getMove(int player, String playerName);
-    int[] getAiMove(int player);
+    int[] getAiMove(int player, int howMany);
     void mark(int player, int row, int col);
     boolean hasWon(int player, int howMany);
     boolean isFull();

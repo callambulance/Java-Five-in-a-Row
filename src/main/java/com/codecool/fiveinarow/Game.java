@@ -48,23 +48,64 @@ public class Game implements GameInterface {
 
     }
 
-    public int[] getAiMove(int player) {
+    public int[] getAiMove(int player, int howMany) {
 //        example just for checking if it works
         int x = 0; // x - row
         int y = 0;  // y - column
 
-        while (board[x][y] != 0){
-            x = (int) (Math.random() * board.length);
-            y = (int) (Math.random() * board[0].length);
+        int[] playerCord = null;
+        for (int i = howMany-1; i > 0; i--) {
+            playerCord = AIwon(i, player);
+            if (playerCord != null) {
+                break;
+            }
         }
-        int [] move = {x, y};
+        int [] move;
+        if (playerCord == null) {
+            while (board[x][y] != 0) {
+                x = (int) (Math.random() * board.length);
+                y = (int) (Math.random() * board[0].length);
+            }
+            move = new int[]{x, y};
+        } else {
+            move = playerCord;
+        }
 
         return move;
     }
 
 
     public int[] AIwon (int howMany, int player) {
-
+        int[] playerLose;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if ((j + howMany-1 < board[0].length) && board[i][j] == player) {
+                    playerLose = checkIa(player, howMany-1, i, j, true);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if ((i +howMany-1 < board.length) && board[i][j] == player) {
+                    playerLose = checkIa(player, howMany-1, i, j, false);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if (((i != 0 && i +howMany-1 < board.length) && (j != 0 && j + howMany-1 < board[0].length))
+                        && board[i][j] == player) {
+                    playerLose = checkIaDiagonal(player, howMany-1, i, j, true);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if (((i != 0 && i +howMany-1 < board.length) && (j != board[i].length-1 && j - howMany+1 >= 0)) && board[i][j] == player) {
+                    playerLose = checkIaDiagonal(player, howMany-1, i, j, false);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -220,7 +261,7 @@ public class Game implements GameInterface {
                 if (playerMove == null){
                     playerMove = AIdontLose(howMany, player.getNumber());
                     if(playerMove == null){
-                        playerMove = getAiMove(player.getNumber());
+                        playerMove = getAiMove(player.getNumber(), howMany);
                     }
                 }
             }
@@ -293,17 +334,26 @@ public class Game implements GameInterface {
                     return null;
                 }
             }
-            if (board[i][j - 1] == 0 && board[i][j + howMany] == 0) {
-                move[0] = i;
-                move[1] = j - 1;
-            } else if (board[i][j - 1] == 0 && board[i][j + howMany] == player) {
-                move[0] = i;
-                move[1] = j - 1;
-            } else if (board[i][j - 1] == player && board[i][j + howMany] == 0) {
-                move[0] = i;
-                move[1] = j + howMany;
+            if (j > 0) {
+                if (board[i][j - 1] == 0 && board[i][j + howMany] == 0) {
+                    move[0] = i;
+                    move[1] = j - 1;
+                } else if (board[i][j - 1] == 0 && board[i][j + howMany] == player) {
+                    move[0] = i;
+                    move[1] = j - 1;
+                } else if (board[i][j - 1] == player && board[i][j + howMany] == 0) {
+                    move[0] = i;
+                    move[1] = j + howMany;
+                } else {
+                    move = null;
+                }
             } else {
-                move = null;
+                if (board[i][j + howMany] == 0) {
+                    move[0] = i;
+                    move[1] = j + howMany;
+                } else {
+                    move = null;
+                }
             }
         }else {
             for (int x = i; x < i + howMany; x++) {
@@ -311,17 +361,26 @@ public class Game implements GameInterface {
                     return null;
                 }
             }
-            if (board[i-1][j] == 0 && board[i+howMany][j] == 0) {
-                move[0] = i-1;
-                move[1] = j;
-            } else if (board[i - 1][j] == 0 && board[i + howMany][j] == player) {
-                move[0] = i - 1;
-                move[1] = j;
-            } else if (board[i - 1][j] == player && board[i + howMany][j] == 0) {
-                move[0] = i + howMany;
-                move[1] = j;
+            if (i > 0) {
+                if (board[i - 1][j] == 0 && board[i + howMany][j] == 0) {
+                    move[0] = i - 1;
+                    move[1] = j;
+                } else if (board[i - 1][j] == 0 && board[i + howMany][j] == player) {
+                    move[0] = i - 1;
+                    move[1] = j;
+                } else if (board[i - 1][j] == player && board[i + howMany][j] == 0) {
+                    move[0] = i + howMany;
+                    move[1] = j;
+                } else {
+                    move = null;
+                }
             } else {
-                move = null;
+                if (board[i + howMany][j] == 0) {
+                    move[0] = i + howMany;
+                    move[1] = j;
+                } else {
+                    move = null;
+                }
             }
         }
         return move;
