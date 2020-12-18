@@ -69,7 +69,36 @@ public class Game implements GameInterface {
     }
 
     public int[] AIdontLose (int howMany, int player) {
-
+        int[] playerLose;
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board.length; j++) {
+                if ((j != 0 && j + howMany-2 < board[0].length) && board[i][j] == 1) {
+                    playerLose = checkIa(1, howMany-2, i, j, true);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if ((i != 0 && i +howMany-2 < board.length) && board[i][j] == 1) {
+                    playerLose = checkIa(1, howMany-2, i, j, false);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if (((i != 0 && i +howMany-2 < board.length) && (j != 0 && j + howMany-2 < board[0].length))
+                        && board[i][j] == 1) {
+                    playerLose = checkIaDiagonal(1, howMany-2, i, j, true);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+                if (((i != 0 && i +howMany-2 < board.length) && (j != 0 && j - howMany+2 >= 0)) && board[i][j] == 1) {
+                    playerLose = checkIaDiagonal(1, howMany-2, i, j, false);
+                    if (playerLose != null) {
+                        return playerLose;
+                    }
+                }
+            }
+        }
         return null;
     }
 
@@ -254,5 +283,90 @@ public class Game implements GameInterface {
             }
         }
         return true;
+    }
+
+    private int[] checkIa(int player, int howMany, int i, int j, boolean horizontal) {
+        int[] move = new int[2];
+        if (horizontal) {
+            for (int x = j; x < j + howMany; x++) {
+                if (board[i][x] != player) {
+                    return null;
+                }
+            }
+            if (board[i][j - 1] == 0 && board[i][j + howMany] == 0) {
+                move[0] = i;
+                move[1] = j - 1;
+            } else if (board[i][j - 1] == 0 && board[i][j + howMany] == player) {
+                move[0] = i;
+                move[1] = j - 1;
+            } else if (board[i][j - 1] == player && board[i][j + howMany] == 0) {
+                move[0] = i;
+                move[1] = j + howMany;
+            } else {
+                move = null;
+            }
+        }else {
+            for (int x = i; x < i + howMany; x++) {
+                if (board[x][j] != player) {
+                    return null;
+                }
+            }
+            if (board[i-1][j] == 0 && board[i+howMany][j] == 0) {
+                move[0] = i-1;
+                move[1] = j;
+            } else if (board[i - 1][j] == 0 && board[i + howMany][j] == player) {
+                move[0] = i - 1;
+                move[1] = j;
+            } else if (board[i - 1][j] == player && board[i + howMany][j] == 0) {
+                move[0] = i + howMany;
+                move[1] = j;
+            } else {
+                move = null;
+            }
+        }
+        return move;
+    }
+
+    private int[] checkIaDiagonal(int player, int howMany, int i, int j, boolean plus) {
+        int[] move = new int[2];
+        for (int x = 1; x < howMany; x++){
+            if (plus) {
+                if (board[i + x][j + x] != player) {
+                    return null;
+                }
+            } else {
+                if (board[i + x][j - x] != player) {
+                    return null;
+                }
+            }
+        }
+        if (plus) {
+            if (board[i-1][j-1] == 0 && board[i+howMany][j+howMany] == 0) {
+                move[0] = i+howMany;
+                move[1] = j+howMany;
+            }else if (board[i-1][j-1] == 0 && board[i+howMany][j+howMany] == player) {
+                move[0] = i-1;
+                move[1] = j-1;
+            }else if (board[i-1][j-1] == player && board[i+howMany][j+howMany] == 0) {
+                move[0] = i+howMany;
+                move[1] = j+howMany;
+            }else {
+                move = null;
+            }
+        } else {
+            if (board[i-1][j+1] == 0 && board[i+howMany][j-howMany] == 0) {
+                move[0] = i+howMany;
+                move[1] = j-howMany;
+            }else if (board[i-1][j+1] == 0 && board[i+howMany][j-howMany] == player) {
+                move[0] = i-1;
+                move[1] = j+1;
+            }else if (board[i-1][j-1] == player && board[i+howMany][j-howMany] == 0) {
+                move[0] = i+howMany;
+                move[1] = j-howMany;
+            }else {
+                move = null;
+            }
+        }
+        return move;
     }
 }
